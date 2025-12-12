@@ -1,0 +1,140 @@
+/* src/pages/OtpVerification.css (UPDATED) */
+.otp-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+}
+
+.otp-form {
+  background: #fff;
+  padding: 40px;
+  border-radius: 12px;
+  width: 100%;
+  max-width: 450px;
+  box-shadow: 0 10px 40px rgba(0,0,0,0.2);
+  text-align: center;
+}
+
+.otp-icon {
+  font-size: 48px;
+  margin-bottom: 16px;
+}
+
+.otp-form h1 {
+  margin-bottom: 12px;
+  color: #1e293b;
+  font-size: 26px;
+}
+
+.otp-message {
+  color: #64748b;
+  margin-bottom: 25px;
+  font-size: 14px;
+  line-height: 1.6;
+}
+
+.otp-message strong {
+  color: #667eea;
+  font-weight: 600;
+}
+
+.otp-form input {
+  width: 100%;
+  padding: 16px;
+  margin-bottom: 20px;
+  border-radius: 8px;
+  border: 2px solid #e2e8f0;
+  font-size: 28px;
+  text-align: center;
+  letter-spacing: 8px;
+  font-weight: 600;
+  transition: border-color 0.3s;
+}
+
+.otp-form input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.otp-form button[type="submit"] {
+  width: 100%;
+  padding: 14px;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  transition: transform 0.2s;
+  margin-bottom: 20px;
+}
+
+.otp-form button[type="submit"]:hover:not(:disabled) {
+  transform: translateY(-2px);
+}
+
+.otp-form button[type="submit"]:disabled {
+  background: #94a3b8;
+  cursor: not-allowed;
+  transform: none;
+}
+
+.otp-form .error {
+  color: #ef4444;
+  background: #fee2e2;
+  padding: 10px;
+  border-radius: 6px;
+  margin-bottom: 16px;
+  font-size: 14px;
+}
+
+.resend-section {
+  margin: 20px 0;
+  padding: 20px 0;
+  border-top: 1px solid #e2e8f0;
+}
+
+.resend-section p {
+  margin: 0 0 10px 0;
+  font-size: 14px;
+  color: #64748b;
+}
+
+.resend-btn {
+  background: transparent;
+  color: #667eea;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 600;
+  padding: 8px 16px;
+  border-radius: 6px;
+  transition: background 0.2s;
+}
+
+.resend-btn:hover:not(:disabled) {
+  background: #f1f5f9;
+}
+
+.resend-btn:disabled {
+  color: #94a3b8;
+  cursor: not-allowed;
+}
+
+.back-link {
+  margin-top: 20px;
+  font-size: 14px;
+}
+
+.back-link span {
+  color: #667eea;
+  cursor: pointer;
+  font-weight: 600;
+}
+
+.back-link span:hover {
+  text-decoration: underline;
+}
