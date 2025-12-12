@@ -9,8 +9,12 @@ export default function JobManagement() {
   const [jobs, setJobs] = useState([]);
   const [editingId, setEditingId] = useState(null);
 
+  // --- UPDATED STATE with new fields ---
   const [formData, setFormData] = useState({
-    title: "", description: "", company: "", location: "", skills: "", type: "Full-time",
+    title: "", description: "", company: "", location: "", skills: "", 
+    type: "Full-time", 
+    salaryRange: "", // New
+    deadline: ""     // New
   });
 
   useEffect(() => {
@@ -44,7 +48,11 @@ export default function JobManagement() {
         await api.post("/jobs", formData);
         alert("Job posted successfully!");
       }
-      setFormData({ title: "", description: "", company: "", location: "", skills: "", type: "Full-time" });
+      // Reset form
+      setFormData({ 
+        title: "", description: "", company: "", location: "", skills: "", 
+        type: "Full-time", salaryRange: "", deadline: "" 
+      });
       setEditingId(null);
       fetchMyJobs();
     } catch (error) {
@@ -54,6 +62,10 @@ export default function JobManagement() {
 
   const handleEdit = (job) => {
     setEditingId(job._id);
+    
+    // Format Date for HTML Input (YYYY-MM-DD)
+    const formattedDate = job.deadline ? new Date(job.deadline).toISOString().split('T')[0] : "";
+
     setFormData({
       title: job.title,
       description: job.description,
@@ -61,6 +73,8 @@ export default function JobManagement() {
       location: job.location,
       skills: job.skills?.join(", ") || "",
       type: job.type,
+      salaryRange: job.salaryRange || "",
+      deadline: formattedDate
     });
   };
 
@@ -84,6 +98,14 @@ export default function JobManagement() {
     }
   };
 
+  // Helper to display friendly date
+  const formatDateDisplay = (dateString) => {
+    if (!dateString) return "N/A";
+    return new Date(dateString).toLocaleDateString("en-US", { 
+      year: 'numeric', month: 'short', day: 'numeric' 
+    });
+  };
+
   return (
     <div className="dashboard-container">
       
@@ -103,6 +125,7 @@ export default function JobManagement() {
 
           <form onSubmit={handleSubmit}>
             <div>
+              <span className="form-label">Title</span>
               <input
                 name="title"
                 placeholder="Job Title (e.g. Software Engineer)"
@@ -113,6 +136,7 @@ export default function JobManagement() {
             </div>
 
             <div>
+              <span className="form-label">Company</span>
               <input
                 name="company"
                 placeholder="Company Name"
@@ -123,22 +147,52 @@ export default function JobManagement() {
             </div>
 
             <div style={{display: 'flex', gap: '10px'}}>
-              <input
-                name="location"
-                placeholder="Location"
-                value={formData.location}
-                onChange={handleChange}
-                style={{flex: 1}}
-                required
-              />
-              <select name="type" value={formData.type} onChange={handleChange} style={{width: '120px'}}>
-                <option>Full-time</option>
-                <option>Part-time</option>
-                <option>Internship</option>
-              </select>
+              <div style={{flex: 1}}>
+                <span className="form-label">Location</span>
+                <input
+                  name="location"
+                  placeholder="Location"
+                  value={formData.location}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div style={{width: '120px'}}>
+                <span className="form-label">Type</span>
+                <select name="type" value={formData.type} onChange={handleChange}>
+                  <option>Full-time</option>
+                  <option>Part-time</option>
+                  <option>Internship</option>
+                </select>
+              </div>
+            </div>
+
+            {/* --- NEW FIELDS: Salary & Deadline --- */}
+            <div style={{display: 'flex', gap: '10px'}}>
+              <div style={{flex: 1}}>
+                <span className="form-label">Salary Range</span>
+                <input
+                  name="salaryRange"
+                  placeholder="e.g. 50k-80k"
+                  value={formData.salaryRange}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
+              <div style={{flex: 1}}>
+                <span className="form-label">Deadline</span>
+                <input
+                  type="date"
+                  name="deadline"
+                  value={formData.deadline}
+                  onChange={handleChange}
+                  required
+                />
+              </div>
             </div>
 
             <div>
+              <span className="form-label">Skills</span>
               <input
                 name="skills"
                 placeholder="Skills (comma separated tags)"
@@ -149,6 +203,7 @@ export default function JobManagement() {
             </div>
 
             <div>
+              <span className="form-label">Description</span>
               <textarea
                 name="description"
                 placeholder="Write a compelling job description..."
@@ -169,7 +224,7 @@ export default function JobManagement() {
                 className="cancel-edit-btn"
                 onClick={() => {
                   setEditingId(null);
-                  setFormData({ title: "", description: "", company: "", location: "", skills: "", type: "Full-time" });
+                  setFormData({ title: "", description: "", company: "", location: "", skills: "", type: "Full-time", salaryRange: "", deadline: "" });
                 }}
               >
                 Cancel Edit
@@ -186,7 +241,7 @@ export default function JobManagement() {
             {jobs.length === 0 && (
               <div className="empty-state">
                 <p>You haven't posted any jobs yet.</p>
-                <small>Use the form on the left to create your first listing.</small>
+                <small>Use the form to create your first listing.</small>
               </div>
             )}
 
@@ -207,6 +262,16 @@ export default function JobManagement() {
                     <span>📍 {job.location}</span>
                     <span className="dot-separator">•</span>
                     <span>🕒 {job.type}</span>
+                  </div>
+
+                  {/* --- NEW INFO DISPLAY --- */}
+                  <div className="company-info" style={{fontWeight: '500', color: '#2d3748', marginTop: '5px'}}>
+                    <span>💰 {job.salaryRange}</span>
+                    <span className="dot-separator">•</span>
+                    {/* Turn red if deadline passed */}
+                    <span style={{ color: new Date(job.deadline) < new Date() ? '#e53e3e' : 'inherit' }}>
+                      📅 Due: {formatDateDisplay(job.deadline)}
+                    </span>
                   </div>
 
                   <div className="skills-container">

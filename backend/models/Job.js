@@ -9,6 +9,11 @@ const jobSchema = new mongoose.Schema({
   type: { type: String, enum: ["Full-time", "Part-time", "Internship"], default: "Full-time" },
   status: { type: String, enum: ["Open", "Filled"], default: "Open" },
   
+  // --- NEW FIELDS ---
+  salaryRange: { type: String, required: true }, // e.g. "50k-80k"
+  deadline: { type: Date, required: true },
+  // ------------------
+
   // Link the job to the Recruiter who posted it
   postedBy: { 
     type: mongoose.Schema.Types.ObjectId, 

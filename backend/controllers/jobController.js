@@ -4,16 +4,20 @@ import Job from "../models/Job.js";
 // @route   POST /api/jobs
 export const createJob = async (req, res) => {
   try {
-    const { title, description, company, location, skills, type } = req.body;
+    // 1. Destructure all fields including new ones
+    const { title, description, company, location, skills, type, salaryRange, deadline } = req.body;
 
     const job = await Job.create({
       title,
       description,
       company,
       location,
-      skills: skills.split(",").map(skill => skill.trim()), // Convert "React, Node" to ["React", "Node"]
+      skills: typeof skills === "string" ? skills.split(",").map(skill => skill.trim()) : skills,
       type,
-      postedBy: req.user._id // Get ID from logged-in user
+      // 2. Add new fields to database creation
+      salaryRange,
+      deadline,
+      postedBy: req.user._id 
     });
 
     res.status(201).json(job);
